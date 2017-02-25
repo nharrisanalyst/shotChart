@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/nharrisanalyst/shotChart/issues"
   },
-  "homepage": "https://github.com/nharrisanalyst/shotChart#readme"
+  "homepage": "https://github.com/nharrisanalyst/shotChart#readme",
+  "dependencies": {
+    "d3": "^4.6.0",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "qs": "^6.3.1",
+    "request": "^2.79.0",
+    "underscore": "^1.8.3"
+  }
 }
