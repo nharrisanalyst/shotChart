@@ -1,0 +1,19 @@
+{
+  "name": "nbashotchart",
+  "version": "1.0.0",
+  "description": "an nba shot chart app that creates shot charts dynamically. Shot charts can be either polygonal or a XY scatterplot\"",
+  "main": "nodeServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nharrisanalyst/shotChart.git"
+  },
+  "author": "Nathan Harris <twitter.com/nathaniharris>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nharrisanalyst/shotChart/issues"
+  },
+  "homepage": "https://github.com/nharrisanalyst/shotChart#readme"
+}

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>NBA Shot Chart Creator</title>
+  <meta name="author" content="Nathan Harris">
+  <meta name="description" content="Shot Chart">
+  <meta name="keywords" content="NBA Basketball Steph Curry Lebron James">
+  <style>
+#form{
+  border:10px solid white;
+ 
+ 
+ }
+#root{
+width:580;
+height:550;
+float:left;
+
+
+}
+
+.download { 
+  background: #333; 
+  color: #FFF; 
+  font-weight: 900; 
+  border: 2px solid #B10000; 
+  padding: 4px; 
+  margin:4px;
+}
+  .hexagon {
+  
+  stroke: #fff;
+  stroke-width: .0px;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+#pic{
+	float:left;
+
+
+}
+#donate{
+position:absolute;bottom:0;
+
+
+}
+ </style> 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  
+  </head>
+  <body>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
+  <script src="https://d3js.org/d3-selection-multi.v0.4.min.js"></script>
+  <script>
+
+  var hexbin = d3_hexbin.hexbin();
+
+</script>
+  
+  
+  
+  
+  <div id='form'></div>
+  <br>
+  <a
+  class="download"
+  href="javascript:(function () { var e = document.createElement('script'); if (window.location.protocol === 'https:') { e.setAttribute('src', 'https://rawgit.com/NYTimes/svg-crowbar/gh-pages/svg-crowbar.js'); } else { e.setAttribute('src', 'http://nytimes.github.com/svg-crowbar/svg-crowbar.js'); } e.setAttribute('class', 'svg-crowbar'); document.body.appendChild(e); })();">
+    <!--⤋--><big>⇩</big> Download Chart
+</a>
+  <br>
+  
+   
+  <div id='loading'></div>
+ 
+ <div> <div id='legend'></div><div id='root'></div><div id='pic'></div></div>
+  
+  
+  <div id='svgdataurl'></div>
+  <div id='pngdataurl'></div>
+ <!--  Donate Button -->
+  <form id="donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+
+  
+ <script>
+ //colorSCale
+ 
+var colorScale = d3.scaleLinear()
+    .domain([-.055, 0, .055])
+    .range(["blue", "yellow", "red"]);
+ //formatting hexagonal data function
+ 	
+ var hexDataFormat=function(data){	
+ 	 var hexData=[];
+	 var xData;
+	 var yData;
+	 var leagueAv;
+	 var playerAv;
+ 	
+ 	var dataAverage=[];
+	
+	data.resultSets[1].rowSet.forEach((aver)=>{
+	
+	         dataAverage.push([aver[1],aver[2],aver[3],aver[6],0,0,0,0])
+	
+	
+	
+	
+	
+	})
+	
+	
+	data.resultSets[0].rowSet.forEach((shot)=>{
+	     if(shot[20]){
+	    	dataAverage.forEach((av,i)=>{
+           if(shot[13]==av[0] && shot[14]==av[1] && shot[15]==av[2]){
+          
+           dataAverage[i][4]+=1;
+           
+           
+           
+           
+           }
+        })
+
+		}else{
+		
+		 dataAverage.forEach((av,i)=>{
+		 if(shot[13]==av[0] && shot[14]==av[1] && shot[15]==av[2]){
+           	dataAverage[i][5]+=1;
+           
+           
+           
+           
+           }
+        })
+	}
+	
+	
+	
+	
+	
+	
+	
+	});
+	
+	dataAverage.forEach((loc,i)=>{
+	 var totalShots =(loc[4]+loc[5])
+	dataAverage[i][6]=totalShots
+	dataAverage[i][7]=(dataAverage[i][4]/dataAverage[i][6])
+	
+	})
+	
+	
+	console.log('data average')
+	console.log(dataAverage)
+	
+	
+	
+	
+	
+	
+	
+	
+	 data.resultSets[0].rowSet.forEach((d)=>{
+	      xData=xScale(d[17])
+	      yData=yScale(d[18])
+	      
+	      dataAverage.forEach((av)=>{
+	             if(d[13]==av[0] && d[14]==av[1] && d[15]==av[2]){
+	                  leagueAv=av[3];
+	                  playerAv=av[7];     
+	             
+	             hexData.push({0:xData,1:yData,league:leagueAv,player:playerAv})
+	      
+	      					}
+	      
+	      			})
+	      
+	     
+	     }) 
+	     
+	     return hexData;
+	     
+	     }
+ 
+//Loading
+//loading
+ 
+ var createLoading= function(){
+	d3.select('#loading').append('div').attr('id','loadingDiv').text('Loading...');
+ 
+ }
+ 
+ 
+ 
+ var removeLoading=function(){
+	d3.select('#loadingDiv').remove()
+ 
+ }
+ 
+//hexagonal ordinal scale
+
+var colors=['#0000ff','#ffff00','#ff0000'] 
+  
+ 
+ 
+ 
+ //Tooltip
+ var showToolTip=function(d){
+        
+		$(this).popover({
+			placement:'auto top',
+			container:'body',
+			trigger:'manual',
+			html:true,
+			content: function(){ return "Shot Distance: "+d[16]+"<br>Action Type: " + d[11]+"</br> Game Date: "
+			 +d[21].slice(4,6)+"-"+d[21].slice(6,8)+"-"+d[21].slice(0,4)+"<br>"+d[14]+"</br>"
+		}
+		
+		
+	});
+		
+	 $(this).popover('show');
+
+
+
+
+}
+
+var removeToolTip=function(d){
+
+             $('.popover').each(function(){
+             
+             $(this).remove();
+             })
+             
+             
+    }
+ 
+ 
+ 
+ 
+ //chart state
+ var chartState={chart:'hex'};
+ //boilerplate D3
+var margin={top:40, r:40, bottom: 40, l:40};
+ var width= 580-margin.r-margin.l;
+ var height= 550-margin.top-margin.bottom;
+ var dead;
+ //scales
+var  xScale=d3.scaleLinear().domain([250,-250]).range([0,width])
+var yScale= d3.scaleLinear().domain([-50,420]).range([height,0])
+ var svg;
+ 
+ 
+ createLoading()
+ d3.json('/curry',function(err,data){
+ 	if(err){
+ 		console.log('there was an error')
+ 	}else{
+ 
+console.log(data);
+ 
+var radius = d3.scaleSqrt()
+    .domain([0, 100])
+    .range([0, 25]);
+ 
+ 
+    
+    
+  svg=d3.select('#root').append('svg').attr('id','svgChart')
+ 			.attr('width',width+margin.r+margin.l)
+ 			.attr('height',height+margin.top+margin.bottom)
+ 			.append('g')
+ 			.attr('width',width)
+ 			.attr('height',height)
+ 			.attr('transform','translate('+margin.l+','+margin.top+')')
+ 			.append("image").attr('xlink:href',"https://thedatagame.files.wordpress.com/2016/03/nba_court.jpg")
+ 			.attr('width',width)
+ 			.attr('height',height);
+ 	
+//Hex Data Format 17:locX 18:locY  20:made 
+	
+	console.log(data);
+	
+ hexData=hexDataFormat(data);
+	     
+	
+    console.log('worked until here')
+    var hexbin = d3_hexbin.hexbin()
+    .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]])
+    
+    .radius(10);
+     console.log(hexbin(hexData));
+    console.log('It Worked')
+ //['parameters']['PlayerId']
+ d3.select('g').append("g").attr('id','hexG')
+    .attr("clip-path", "url(#clip)")
+  .selectAll(".hexagon")
+    .data(hexbin(hexData).sort(function(a, b) { return b.length - a.length; }))
+  .enter().append("path")
+    .attr("class", "hexagon")
+    .attr("d",  function(d){return hexbin.hexagon(d.length)})
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style('fill',function(d){return colorScale((d3.mean(d,function(d){return +d.player;})
+    -d3.mean(d, function(d){return +d.league;})))})
+    			;
+ //player name
+ //player id
+ //pic link
+
+
+
+
+
+// (d3.mean(d,function(d){return +d.player;})-d3.mean(d, function(d){return +d.league;}))
+
+
+
+
+//Player Image
+ 
+
+ 
+  d3.select('#pic').append('img').attr('src','http://stats.nba.com/media/players/230x185/'+data.parameters.PlayerID+'.png');
+ 
+  createTitle(data);
+ 
+ removeLoading()
+ 
+ 	
+ 	
+ 	
+ 	
+ 	
+ 
+ }
+ 
+ 
+ })
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  <script>
+  
+  var x;
+  var playerData;
+  var nameMapId={};
+  var nameMapTeamId={};
+  
+  var change=function(t){
+  console.log($('#check').is(':checked'))
+  
+  
+  };
+  
+  var year=["2016-17","2015-16","2014-15","2013-14","all"];
+  
+  ///Original Chart
+  d3.json('/nba/data/players.json',function(err,data){
+  
+  //maps for players to team id and to player id   
+     
+     data.forEach((player)=>{
+     	nameMapId[player.lastName+", "+player.firstName]=player.playerId
+           
+     
+     
+     })
+  
+  data.forEach((player)=>{
+     	nameMapTeamId[player.lastName+", "+player.firstName]=player.teamId
+           
+     
+     
+     })
+  
+  console.log(nameMapId);
+  console.log(nameMapTeamId);
+  playerData=data
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+ //The Input Form for generating a new shot chart 
+  d3.select('#form').append('form').attr('id','theForm')
+  var select1=d3.select('#form').append('select').attr('id','select1').attr('form','theForm');
+  		select1.selectAll('option').data(playerData).enter()
+  				.append('option').attr('value',function(d){
+  				 return d.lastName+", "+d.firstName;
+  				
+  				
+  				})
+  				.text(function(d){ return d.lastName+", "+d.firstName;})
+  
+  			var select2=d3.select('#form').append('select').attr('id','select2').attr('form','theForm');
+			
+			select2.selectAll('option').data(year).enter()
+  				.append('option').attr('value',function(d){
+  				 return d;
+  				
+  				
+  				})
+  				.text(function(d){ return d;});
+  	var chartOption=d3.select('form').append('label').text('scatterplot').append('input').attr('type','checkbox').attr('value','XY').attr('id','check').attr("onClick", "change(this)");
+  					d3.select('form').append('br')
+   var button = d3.select('form').append('button').text('Create Shot Chart').attr('onclick','shotChart(event)');
+  
+  
+  
+  
+  
+  ;});
+  
+  
+ //new Shot Chart onClick function 
+  
+  var shotChart=function(e){
+  
+      console.log(e)
+       e.preventDefault()
+       createLoading()
+       var player = $("#select1").val();
+       var season=$('#select2').val();
+       var data={playerId:nameMapId[player],seasonId:season,pic:'http://stats.nba.com/media/players/230x185/'+nameMapId[player]+'.png'}
+        
+       var url='/shotChartData';
+      
+  //the XMLHTTPREQUEST listener function (this creates for different charts depending on the chartState and scatterplot state   
+     function reqListener(){
+     var data=this.response;
+     data=JSON.parse(data);
+    
+     
+     
+
+
+
+//d3chart hexgonal update only updates hex chart no state change
+
+if($('#check').is(':checked')==0&& chartState.chart=='hex'){
+
+var hexData=hexDataFormat(data);
+	     
+	     
+	
+    console.log('worked until here')
+    var hexbin = d3_hexbin.hexbin()
+    .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]])
+    
+    .radius(10);
+     
+  
+  var hexUp=d3.select('#hexG').selectAll(".hexagon")
+    .data(hexbin(hexData).sort(function(a, b) { return b.length - a.length; }));
+    
+    
+    
+  hexUp.enter().append('path');
+  hexUp.transition().duration(5000)
+	.attr("d",  function(d){return hexbin.hexagon(d.length)})
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+     .style('fill',function(d){return colorScale((d3.mean(d,function(d){return +d.player;})
+    -d3.mean(d, function(d){return +d.league;})))});
+   
+   	d3.selectAll('img').remove();
+     d3.select('#pic').append('img').attr('src','http://stats.nba.com/media/players/230x185/'+data.parameters.PlayerID+'.png')
+     
+     createTitle(data);
+     removeLoading();
+     return
+     }
+  
+  //Updates XY Chart does not change Chart state
+  
+	else if($('#check').is(':checked')==1&& chartState.chart=='XY'){
+  
+
+  
+  
+  
+  
+  
+  //d3 xy plot Shot Chart
+  
+   var circle=d3.select('#svgChart').select('g').selectAll('circle').data(data.resultSets[0].rowSet)
+       
+       
+       
+  
+         
+      
+       circle.enter().append('circle')
+   		.transition().duration(5000)
+  		.attr('cx',function(d){return xScale(d[17])})
+  		.attr('cy',function(d){return yScale(d[18])})
+  		.attr('r',3)
+  		.attr('stroke','black')
+ 		.attr('fill',function(d){if(d[20]==1){ return 'black'}else{return 'none'}})
+    	
+    	circle.on("mouseover",showToolTip)
+ 			.on('mouseout',removeToolTip)
+ 			
+ 		 circle.exit().transition().duration(5000)
+   		.attr('cx',function(d){if(xScale(d[17])>width/2){return width}else{return 0}})
+       .remove();
+ 		
+   d3.selectAll('img').remove();
+   d3.select('#pic').append('img').attr('src','http://stats.nba.com/media/players/230x185/'+data.parameters.PlayerID+'.png'); 
+     
+     createTitle(data);
+     removeLoading();
+     return
+     }
+  //changes chart to an XY plot and changes chart state to 'XY'   
+     else if($('#check').is(':checked')==1&& chartState.chart=='hex'){
+      chartState.chart='XY'
+      console.log(data);
+      console.log('this');
+     d3.select('#svgChart').remove();
+     
+      svg=d3.select('#root').append('svg').attr('id','svgChart')
+ 			.attr('width',width+margin.r+margin.l)
+ 			.attr('height',height+margin.top+margin.bottom)
+ 			.append('g')
+ 			.attr('width',width)
+ 			.attr('height',height)
+ 			.attr('transform','translate('+margin.l+','+margin.top+')')
+            .append("image").attr('xlink:href',"https://thedatagame.files.wordpress.com/2016/03/nba_court.jpg")
+ 			.attr('width',width).attr('height',height)
+ 			
+ var circle=d3.select('g').selectAll("circle").data(data.resultSets[0].rowSet).enter()
+ 		.append('circle')
+ 		.attr('cx',function(d){return xScale(d[17])})
+ 		.attr('cy',function(d){return yScale(d[18])})
+ 		.attr('r',3)
+ 		.attr('stroke','black')
+ 		.attr('fill',function(d){if(d[20]==1){ return 'black'}else{return 'none'}})
+ 		.on("mouseover",showToolTip)
+ 		.on('mouseout',removeToolTip)
+ 	
+ 	 d3.selectAll('img').remove();
+     d3.select('#pic').append('img').attr('src','http://stats.nba.com/media/players/230x185/'+data.parameters.PlayerID+'.png');
+ 		createTitle(data);
+ 		 legendXY();
+ 		removeLoading();
+ 		return
+ 		}
+/// Chart is change to hex and chart state is updated		
+ 		
+ 		else if($('#check').is(':checked')==0&& chartState.chart=='XY'){
+ 		   chartState.chart='hex'
+ 		removeLegendXY();
+ 		d3.select('#svgChart').remove();
+ 		svg=d3.select('#root').append('svg').attr('id','svgChart')
+ 			.attr('width',width+margin.r+margin.l)
+ 			.attr('height',height+margin.top+margin.bottom)
+ 			.append('g')
+ 			.attr('width',width)
+ 			.attr('height',height)
+ 			.attr('transform','translate('+margin.l+','+margin.top+')')
+ 			.append("image").attr('xlink:href',"https://thedatagame.files.wordpress.com/2016/03/nba_court.jpg")
+ 			.attr('width',width)
+ 			.attr('height',height);
+	
+//17:locX 18:locY  20:made
+	var hexData=hexDataFormat(data); 
+	     
+	     
+	
+    console.log('worked until here')
+    var hexbin = d3_hexbin.hexbin()
+    .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]])
+    
+    .radius(10);
+     console.log(hexbin(hexData));
+    console.log('It Worked')
+ //['parameters']['PlayerId']
+ d3.select('g').append("g").attr('id','hexG')
+    .attr("clip-path", "url(#clip)")
+  .selectAll(".hexagon")
+    .data(hexbin(hexData).sort(function(a, b) { return b.length - a.length; }))
+  .enter().append("path")
+    .attr("class", "hexagon")
+    .attr("d",  function(d){return hexbin.hexagon(d.length)})
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+     .style('fill',function(d){return colorScale((d3.mean(d,function(d){return +d.player;})
+    -d3.mean(d, function(d){return +d.league;})))})
+ 
+ 
+
+  d3.selectAll('img').remove();
+  d3.select('#pic').append('img').attr('src','http://stats.nba.com/media/players/230x185/'+data.parameters.PlayerID+'.png');
+  createTitle(data);	
+  removeLoading();
+ 
+ 	return	}
+     
+     
+ }
+     
+//XMLHttpRequest     
+     
+      var shotData = new XMLHttpRequest();
+  	  shotData.addEventListener("load", reqListener);
+  	  shotData.open('POST','/shotChartData');
+  	  shotData.send(JSON.stringify(data));
+
+
+        
+  
+  }
+  
+  
+//tooltip for XY plots
+//"SHOT_DISTANCE" d[16] "ACTION_TYPE" d[11] "GAME_DATE" d[21].slice(4,6)-d[21].slice(6,8)-d[21].slice(0,4)
+
+
+ </script>
+ 
+ 
+ <script >
+var download= function(){
+ (function (){ 
+    var e = document.createElement('script'); 
+    if (window.location.protocol === 'https:') { 
+        e.setAttribute('src', 'https://rawgit.com/NYTimes/svg-crowbar/gh-pages/svg-crowbar.js'); 
+    } else { 
+        e.setAttribute('src', 'http://nytimes.github.com/svg-crowbar/svg-crowbar.js'); 
+    } 
+    e.setAttribute('class', 'svg-crowbar'); 
+    document.body.appendChild(e); 
+})();
+ 
+ }
+ 
+ 
+ 
+ d3.select('.download').on('click',download);
+ 
+ var createTitle=function(data){
+ 	if(!($('#title').val()==undefined))	{d3.select('#title').remove();}
+
+	d3.select('svg').append('text').attr('id','title').attr('transform','translate(248,35)').attr('fontsize',20).text(data.resultSets[0].rowSet[0][4].toString())
+ 
+ }
+ 
+ var legendXY = function(){
+ var legendData=['Made Shot','Missed Shot']
+ 
+ 
+	var legend= d3.select('#legend').append('svg').attrs({
+                   'id':'legendSVGXY',
+                   'width':100,
+                   'height':30})
+                   
+                   legend.append('g').selectAll('circle').data(legendData).enter()
+                   .append('circle').attrs({
+                                    cx:5,
+                                    cy:function(d,i){return 10+(i*15);},
+                                    r:3,
+                                    stroke:'black',
+                                    fill:function(d){if(d=='Made Shot'){return "black"}else{ return "none"}}
+                            })
+                            
+                        legend.selectAll('text').data(legendData).enter().append('text')
+                        .attrs({	
+                        			x:15,
+                                    y:function(d,i){return 15+(i*15);},
+                        
+                        
+                        
+                        }).text(function(d){return d});
+ 
+ 
+ 
+ }
+ var removeLegendXY=function(){
+ d3.select('#legendSVGXY').remove();
+ 
+ 
+ }
+ 
+ </script>
+  </body>
+</html>
