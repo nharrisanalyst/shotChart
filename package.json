@@ -5,7 +5,7 @@
   "main": "nodeServer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1”,
-	"start": "node nodeServer.js"
+	"start": "node app.js"
   },
   "repository": {
     "type": "git",
