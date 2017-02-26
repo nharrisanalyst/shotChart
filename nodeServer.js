@@ -1,11 +1,13 @@
 var request = require('request');
 var d3 = require('d3');
 var http = require('http');
-var players =require('./nba/data/players.json');
+
 var _ = require('underscore');
 var fs= require('fs');
 var qs = require('querystring');
 ;
+
+var players = JSON.parse(fs.readFileSync('./nba/data/players.json', 'utf8'));
 var body=[];
 var url = 'http://stats.nba.com/stats/shotchartdetail?'
 
