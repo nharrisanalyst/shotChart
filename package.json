@@ -4,8 +4,8 @@
   "description": "an nba shot chart app that creates shot charts dynamically. Shot charts can be either polygonal or a XY scatterplot\"",
   "main": "nodeServer.js",
   "scripts": {
-    "test": "echo \'Error: no test specified\' && exit 1”",
-	"start": "node nodeServer.js"
+   "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node nodeServer.js"
   },
   "repository": {
     "type": "git",
