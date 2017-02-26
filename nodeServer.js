@@ -239,7 +239,7 @@ var server = http.createServer(function (req, res) {
 		})}	
 
 
-}).listen(process.env.PORT || 8125);
+}).listen(process.env.PORT || 8125,'0.0.0.0');
 
 
 
