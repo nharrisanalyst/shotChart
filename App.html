@@ -19,9 +19,10 @@
 
 
 #form{
-  border:10px solid white;
- 
- 
+  border-top:1px solid black;
+  border-bottom:1px solid black;
+  padding-bottom: 10px;
+  margin-left: 10px;
  }
 #root{
 width:580;
@@ -56,12 +57,41 @@ float:left;
 
 }
 #donate{
-position:absolute;bottom:0;
+
+margin-top:10px;
+
+float:right;
 
 
 }
 #legendSVG{
+margin-top:250px;
 
+}
+#corp{
+	font-size:12px;
+	margin-left: 10px;
+	
+	margin-right:0;
+}
+#author{
+font-size:12px;
+float: right;
+padding-right: 5px;
+}
+#corp, #author
+{
+    display:inline;
+}
+#flex{
+width:1000px;
+ 
+
+
+}
+#mainTitle{
+text-align:center;
+font-size: 250%;
 
 }
  </style> 
@@ -80,9 +110,11 @@ position:absolute;bottom:0;
   var hexbin = d3_hexbin.hexbin();
 
 </script>
+  <div id ="wrapperAuthor">
+ 	<div id="corp"> an <b>Independentviz.com</b> creation</div>   <div id="author"> by <a href="https://www.twitter.com/nathaniharris"><u> Nathan Harris</u></a> </div>
+</div>
   
-  
-  
+  <h1 id='mainTitle'>Shot Chart Creator</h1>
   
   <div id='form'></div>
   <br>
@@ -96,7 +128,7 @@ position:absolute;bottom:0;
    
   <div id='loading'></div>
  
- <div id='flex'> <div id='legend'></div><div id='root'></div><div id='pic'></div></div>
+ <div id='flex'> <div id='root'></div><div id='pic'></div><div id='legend'></div></div>
   
   
   <div id='svgdataurl'></div>
@@ -740,7 +772,7 @@ var download= function(){
  
 	var legend= d3.select('#legend').append('svg').attrs({
                    'id':'legendSVG',
-                   'width':100,
+                   'width':350,
                    'height':30})
                    
                    legend.append('g').selectAll('circle').data(legendData).enter()
