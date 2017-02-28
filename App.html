@@ -6,7 +6,18 @@
   <meta name="author" content="Nathan Harris">
   <meta name="description" content="Shot Chart">
   <meta name="keywords" content="NBA Basketball Steph Curry Lebron James">
+    <!-- twitter meta data -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@nathaniharris" />
+<meta name="twitter:creator" content="@nathaniharris" />
+<meta name="twitter:title" content="NBA Shot Chart App">
+<meta name="twitter:description" content="Generate Interactive nba Shot Charts which you can Download">
+<!-- t<meta name="twitter:image" content="https://c1.staticflickr.com/9/8305/28539898286_9d38677906_b.jpg" > need proper Image-->
   <style>
+
+
+
+
 #form{
   border:10px solid white;
  
@@ -49,6 +60,10 @@ position:absolute;bottom:0;
 
 
 }
+#legendSVG{
+
+
+}
  </style> 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   
@@ -81,7 +96,7 @@ position:absolute;bottom:0;
    
   <div id='loading'></div>
  
- <div> <div id='legend'></div><div id='root'></div><div id='pic'></div></div>
+ <div id='flex'> <div id='legend'></div><div id='root'></div><div id='pic'></div></div>
   
   
   <div id='svgdataurl'></div>
@@ -102,6 +117,14 @@ position:absolute;bottom:0;
 var colorScale = d3.scaleLinear()
     .domain([-.055, 0, .055])
     .range(["blue", "yellow", "red"]);
+    
+   
+    
+    var radius = d3.scaleLinear()
+    .domain([0, 1000])
+    .range([0, 500]);
+    
+    
  //formatting hexagonal data function
  	
  var hexDataFormat=function(data){	
@@ -276,9 +299,7 @@ var yScale= d3.scaleLinear().domain([-50,420]).range([height,0])
  
 console.log(data);
  
-var radius = d3.scaleSqrt()
-    .domain([0, 100])
-    .range([0, 25]);
+
  
  
     
@@ -286,6 +307,7 @@ var radius = d3.scaleSqrt()
   svg=d3.select('#root').append('svg').attr('id','svgChart')
  			.attr('width',width+margin.r+margin.l)
  			.attr('height',height+margin.top+margin.bottom)
+ 			
  			.append('g')
  			.attr('width',width)
  			.attr('height',height)
@@ -315,7 +337,8 @@ var radius = d3.scaleSqrt()
     .data(hexbin(hexData).sort(function(a, b) { return b.length - a.length; }))
   .enter().append("path")
     .attr("class", "hexagon")
-    .attr("d",  function(d){return hexbin.hexagon(d.length)})
+    .attr("d",  function(d){if(d.length>100){
+	return hexbin.hexagon(radius(d.length))}else{return hexbin.hexagon(d.length)}})
     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
     .style('fill',function(d){return colorScale((d3.mean(d,function(d){return +d.player;})
     -d3.mean(d, function(d){return +d.league;})))})
@@ -340,8 +363,8 @@ var radius = d3.scaleSqrt()
   d3.select('#pic').append('img').attr('src','http://stats.nba.com/media/players/230x185/'+data.parameters.PlayerID+'.png');
  
   createTitle(data);
- 
- removeLoading()
+	legendHex();
+ removeLoading();
  
  	
  	
@@ -506,12 +529,25 @@ var hexData=hexDataFormat(data);
     
     
     
-  hexUp.enter().append('path');
-  hexUp.transition().duration(5000)
-	.attr("d",  function(d){return hexbin.hexagon(d.length)})
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+  
+  hexUp.attr("class", "hexagon")
+  
+  	hexUp.enter().append('path').merge(hexUp).transition().duration(5000)
+  	.attr("class", "hexagon")
+	.attr("d",  function(d){if(d.length>100){
+	return hexbin.hexagon(radius(d.length))}else{return hexbin.hexagon(d.length)}})
+	.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
      .style('fill',function(d){return colorScale((d3.mean(d,function(d){return +d.player;})
     -d3.mean(d, function(d){return +d.league;})))});
+    
+    // .merger(hexUp)
+//     .attr("d",  function(d){ if(d.length>100){
+// 	return hexbin.hexagon(radius(d.length))}else{return hexbin.hexagon(d.length)}})
+// 	.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+//      .style('fill',function(d){return colorScale((d3.mean(d,function(d){return +d.player;})
+//     -d3.mean(d, function(d){return +d.league;})))});
+
+hexUp.exit().remove();
    
    	d3.selectAll('img').remove();
      d3.select('#pic').append('img').attr('src','http://stats.nba.com/media/players/230x185/'+data.parameters.PlayerID+'.png')
@@ -541,7 +577,8 @@ var hexData=hexDataFormat(data);
          
       
        circle.enter().append('circle')
-   		.transition().duration(5000)
+   		
+   		circle.transition().duration(5000)
   		.attr('cx',function(d){return xScale(d[17])})
   		.attr('cy',function(d){return yScale(d[18])})
   		.attr('r',3)
@@ -565,6 +602,7 @@ var hexData=hexDataFormat(data);
   //changes chart to an XY plot and changes chart state to 'XY'   
      else if($('#check').is(':checked')==1&& chartState.chart=='hex'){
       chartState.chart='XY'
+      removeLegend();
       console.log(data);
       console.log('this');
      d3.select('#svgChart').remove();
@@ -600,7 +638,7 @@ var hexData=hexDataFormat(data);
  		
  		else if($('#check').is(':checked')==0&& chartState.chart=='XY'){
  		   chartState.chart='hex'
- 		removeLegendXY();
+ 		removeLegend();
  		d3.select('#svgChart').remove();
  		svg=d3.select('#root').append('svg').attr('id','svgChart')
  			.attr('width',width+margin.r+margin.l)
@@ -632,7 +670,8 @@ var hexData=hexDataFormat(data);
     .data(hexbin(hexData).sort(function(a, b) { return b.length - a.length; }))
   .enter().append("path")
     .attr("class", "hexagon")
-    .attr("d",  function(d){return hexbin.hexagon(d.length)})
+    .attr("d",  function(d){if(d.length>100){
+	return hexbin.hexagon(radius(d.length))}else{return hexbin.hexagon(d.length)}})
     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
      .style('fill',function(d){return colorScale((d3.mean(d,function(d){return +d.player;})
     -d3.mean(d, function(d){return +d.league;})))})
@@ -641,7 +680,8 @@ var hexData=hexDataFormat(data);
 
   d3.selectAll('img').remove();
   d3.select('#pic').append('img').attr('src','http://stats.nba.com/media/players/230x185/'+data.parameters.PlayerID+'.png');
-  createTitle(data);	
+  createTitle(data);
+  legendHex();	
   removeLoading();
  
  	return	}
@@ -700,7 +740,7 @@ var download= function(){
  
  
 	var legend= d3.select('#legend').append('svg').attrs({
-                   'id':'legendSVGXY',
+                   'id':'legendSVG',
                    'width':100,
                    'height':30})
                    
@@ -725,11 +765,99 @@ var download= function(){
  
  
  }
- var removeLegendXY=function(){
- d3.select('#legendSVGXY').remove();
+ var removeLegend=function(){
+ d3.select('#legendSVG').remove();
  
  
  }
+ //-.055, 0 , .055
+ var legendHex =function(){
+      var colorLegScale = d3.scaleLinear()
+    .domain([3, 10, 17])
+    .range(["blue", "yellow", "red"]);
+ 
+ 
+ 
+    var legendData=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+ 	var legend = d3.select('#legend').append('svg').attrs({
+ 	    'id': 'legendSVG',
+ 	    'width':350,
+ 	    'height':65})
+ 	    
+ 	    legend.append('g').selectAll('rect').data(legendData).enter()
+ 	    .append('rect')
+ 	    .attrs({
+ 	    	x:function(d,i){return (i*10)+20},
+ 	    	y:30,
+ 	    	'width':10,
+ 	    	'height':10,
+ 	    	'fill':function(d){return colorLegScale(d)}	
+ 	    
+ 	    })
+ 	 
+ 	 d3.select('#legendSVG').append('line')
+ 				.attrs({
+ 				'x1':115,
+ 				'x2':115,
+ 				'y1':40,
+ 				'y2':50,
+ 				'stroke-width':1,
+ 				'stroke':'black'
+ 				
+ 				
+ 				})
+ 				
+ 	d3.select('#legendSVG').append('line')
+ 				.attrs({
+ 				'x1':50,
+ 				'x2':50,
+ 				'y1':30,
+ 				'y2':20,
+ 				'stroke-width':1,
+ 				'stroke':'black'
+ 				
+ 				
+ 				})
+ //		
+ 		d3.select('#legendSVG').append('line')
+ 				.attrs({
+ 				'x1':180,
+ 				'x2':180,
+ 				'y1':30,
+ 				'y2':20,
+ 				'stroke-width':1,
+ 				'stroke':'black'
+ 				
+ 				
+ 				})	
+ 				
+ 		d3.select('#legendSVG').append('text')
+ 				.attrs({
+ 				'x':150,
+ 				'y':15,
+ 				}).text('5.5% Above NBA Avg.')	
+ 				
+ 					d3.select('#legendSVG').append('text')
+ 				.attrs({
+ 				'x':85,
+ 				'y':59,
+ 				}).text('NBA Avg.')			
+ 	 
+ 	 d3.select('#legendSVG').append('text')
+ 				.attrs({
+ 				'x':0,
+ 				'y':15,
+ 				}).text('5.5% Below NBA Avg.')	
+ 	}
+//	
+	
+ 	 
+ 	
+ 	
+ 
+ 
+ 
+ 
  
  </script>
   </body>
