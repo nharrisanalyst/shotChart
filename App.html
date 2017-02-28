@@ -574,11 +574,10 @@ hexUp.exit().remove();
        
        
   
-         
+       circle.attr('class','update')  
       
-       circle.enter().append('circle')
-   		
-   		circle.transition().duration(5000)
+       circle.enter().append('circle').merge(circle)
+   		.transition().duration(5000)
   		.attr('cx',function(d){return xScale(d[17])})
   		.attr('cy',function(d){return yScale(d[18])})
   		.attr('r',3)
