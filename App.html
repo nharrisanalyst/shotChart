@@ -113,6 +113,23 @@ text-align:center;
 font-size: 250%;
 
 }
+ #explainer{
+ 	text-align:center;
+ 	width:250px;
+ 	margin-top:10px;
+	margin-left:5px;
+	color:#333333;
+
+}
+
+#flex, #explainer { 
+float: left;
+ }
+ 
+ #container{
+  overflow: hidden;
+ 
+ }
  </style> 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   
@@ -147,8 +164,8 @@ font-size: 250%;
    
   <div id='loading'></div>
  
- <div id='flex'> <div id='root'></div><div id='pic'></div><div id='legendText'></div><div id='legend'></div></div>
-  
+ <div id='container'><div id='flex'> <div id='root'></div><div id='pic'></div><div id='legendText'></div><div id='legend'></div></div>
+  <div id='explainer'></div></div>
   
   <div id='svgdataurl'></div>
   <div id='pngdataurl'></div>
@@ -415,6 +432,8 @@ console.log(data);
  
   createTitle(data);
 	legendHex();
+	
+	d3.select('#explainer').text('The NBA Shot Chart Creator allows you to dynamically create NBA shot charts in both a XY scatterplot style and a Hexagonal Binnig style. The data is provided from stats.nba.com. This site is not affiliated in anyway with the NBA. This site was created by me, @nathanIharris. I created the front end and the back end. Feel free to download charts and use them in any publication. (to download multiple charts refresh the site). I hope to add more features in the near future as time allows. I can be contacted at nharrisanalyst@gmail.com or at my twitter handle.')
  removeLoading();
  
  	
