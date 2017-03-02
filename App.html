@@ -14,13 +14,25 @@
 <meta name="twitter:description" content="Generate Interactive nba Shot Charts which you can Download">
 <!-- t<meta name="twitter:image" content="https://c1.staticflickr.com/9/8305/28539898286_9d38677906_b.jpg" > need proper Image-->
   <style>
+h1, #wrapperAuthor, body{
+	
+	    
 
-div{
+
+
+}
+#title{
+font-size: 200%;
 
 
 
 }
 
+#legendTextText{
+margin-top: 120px;
+
+
+}
 
 #form{
   border-top:1px solid black;
@@ -57,6 +69,7 @@ float:left;
 }
 #pic{
 	float:left;
+	border-bottom:1px solid black;
 
 
 }
@@ -69,7 +82,8 @@ float:right;
 
 }
 #legendSVG{
-margin-top:250px;
+border-top:1px solid black;
+margin-top:0px;
 
 }
 #corp{
@@ -133,7 +147,7 @@ font-size: 250%;
    
   <div id='loading'></div>
  
- <div id='flex'> <div id='root'></div><div id='pic'></div><div id='legend'></div></div>
+ <div id='flex'> <div id='root'></div><div id='pic'></div><div id='legendText'></div><div id='legend'></div></div>
   
   
   <div id='svgdataurl'></div>
@@ -452,7 +466,7 @@ console.log(data);
   
   };
   
-  var year=["2016-17","2015-16","2014-15","2013-14","all"];
+  var year=["2016-17","2015-16","2014-15","2013-14"];
   
   ///Original Chart
   d3.json('/nba/data/players.json',function(err,data){
@@ -767,7 +781,7 @@ var download= function(){
  var createTitle=function(data){
  	if(!($('#title').val()==undefined))	{d3.select('#title').remove();}
 
-	d3.select('svg').append('text').attr('id','title').attr('transform','translate(248,35)').attr('fontsize',20).text(data.resultSets[0].rowSet[0][4].toString())
+	d3.select('svg').append('text').attr('id','title').attr('transform','translate(197,35)').attr('fontsize',20).text(data.resultSets[0].rowSet[0][4].toString())
  
  }
  
@@ -778,7 +792,7 @@ var download= function(){
 	var legend= d3.select('#legend').append('svg').attrs({
                    'id':'legendSVG',
                    'width':350,
-                   'height':30})
+                   'height':95})
                    
                    legend.append('g').selectAll('circle').data(legendData).enter()
                    .append('circle').attrs({
@@ -797,13 +811,33 @@ var download= function(){
                         
                         
                         }).text(function(d){return d});
+                        
+                        
+           var legText=d3.select('#legendText').append('svg').attr('id','legendTextText')
+ 			.attr('width',350).attr('height',80)
+ 			
+ 			legText.append('text').attrs({
+ 							x:10,
+ 							y:50
+ 			
+ 			
+ 			
+ 			}).text('Move the mouse over individual shot attempts')
+ 			legText.append('text').attrs({
+ 							x:10,
+ 							y:65
+ 			
+ 			
+ 			
+ 			}).text('to learn more about each shot.')             
+    
  
  
  
  }
  var removeLegend=function(){
  d3.select('#legendSVG').remove();
- 
+ d3.select('#legendTextText').remove();
  
  }
  //-.055, 0 , .055
@@ -818,13 +852,13 @@ var download= function(){
  	var legend = d3.select('#legend').append('svg').attrs({
  	    'id': 'legendSVG',
  	    'width':350,
- 	    'height':65})
+ 	    'height':95})
  	    
  	    legend.append('g').selectAll('rect').data(legendData).enter()
  	    .append('rect')
  	    .attrs({
  	    	x:function(d,i){return (i*10)+20},
- 	    	y:30,
+ 	    	y:55,
  	    	'width':10,
  	    	'height':10,
  	    	'fill':function(d){return colorLegScale(d)}	
@@ -835,8 +869,8 @@ var download= function(){
  				.attrs({
  				'x1':115,
  				'x2':115,
- 				'y1':40,
- 				'y2':50,
+ 				'y1':65,
+ 				'y2':75,
  				'stroke-width':1,
  				'stroke':'black'
  				
@@ -847,8 +881,8 @@ var download= function(){
  				.attrs({
  				'x1':50,
  				'x2':50,
- 				'y1':30,
- 				'y2':20,
+ 				'y1':55,
+ 				'y2':45,
  				'stroke-width':1,
  				'stroke':'black'
  				
@@ -859,8 +893,8 @@ var download= function(){
  				.attrs({
  				'x1':180,
  				'x2':180,
- 				'y1':30,
- 				'y2':20,
+ 				'y1':55,
+ 				'y2':45,
  				'stroke-width':1,
  				'stroke':'black'
  				
@@ -870,20 +904,47 @@ var download= function(){
  		d3.select('#legendSVG').append('text')
  				.attrs({
  				'x':150,
- 				'y':15,
+ 				'y':40,
  				}).text('5.5% Above NBA Avg.')	
  				
  					d3.select('#legendSVG').append('text')
  				.attrs({
  				'x':85,
- 				'y':59,
+ 				'y':84,
  				}).text('NBA Avg.')			
  	 
  	 d3.select('#legendSVG').append('text')
  				.attrs({
  				'x':0,
- 				'y':15,
+ 				'y':40,
  				}).text('5.5% Below NBA Avg.')	
+ 				
+ 		d3.select('#legendSVG').append('text')
+ 				.attrs({
+ 				'x':90,
+ 				'y':20,
+ 				}).text('Efficiency')		
+ 				
+ 				
+ 		var legText=d3.select('#legendText').append('svg').attr('id','legendTextText')
+ 			.attr('width',350).attr('height',80)
+ 			
+ 			legText.append('text').attrs({
+ 							x:10,
+ 							y:50
+ 			
+ 			
+ 			
+ 			}).text('The larger the hexagon the more shots a player')
+ 			legText.append('text').attrs({
+ 							x:10,
+ 							y:65
+ 			
+ 			
+ 			
+ 			}).text('takes in that area.')	
+ 				
+ 				
  	}
 //	
 	
