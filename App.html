@@ -130,17 +130,36 @@ float: left;
   overflow: hidden;
  
  }
+ .fb-share-button{
+ margin-top 10px;
+ 
+ }
+ #tweetContainer{
+ margin-top:5px;
+ 
+ 
+ }
  </style> 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   
   </head>
   <body>
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
   <script src="https://d3js.org/d3-selection-multi.v0.4.min.js"></script>
+  <script src="https://platform.twitter.com/widgets.js"></script>
+ 
   <script>
 
   var hexbin = d3_hexbin.hexbin();
@@ -169,7 +188,12 @@ float: left;
   
   <div id='svgdataurl'></div>
   <div id='pngdataurl'></div>
+ 
+ <div class="fb-share-button" data-href="https://www.nbashotchart.com" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.nbashotchart.com%2F&amp;src=sdkpreparse">Share</a></div>
+<div id="tweetContainer"></div>
+
  <!--  Donate Button -->
+  
   <form id="donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
@@ -180,6 +204,15 @@ float: left;
 
   
  <script>
+ 
+ 
+ twttr.widgets.createShareButton(
+  '/',
+  document.getElementById('tweetContainer'),
+  {
+    text: 'www.nbashotchart.com'
+  }
+);
  //colorSCale
  
 var colorScale = d3.scaleLinear()
