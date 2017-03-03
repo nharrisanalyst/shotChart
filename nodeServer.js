@@ -233,7 +233,7 @@ var server = http.createServer(function (req, res) {
 		
   
         fs.readFile('./App.html',function(err,html){
-    	res.writeHead(200, {"Content-Type": "html"});
+    	res.writeHead(200, {"Content-Type": "text/html"});
     	res.write(html);
      // You Can Call Response.write Infinite Times BEFORE response.end
     	res.end();
