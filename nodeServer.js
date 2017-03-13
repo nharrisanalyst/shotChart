@@ -227,15 +227,22 @@ var server = http.createServer(function (req, res) {
 	
 	playerStatsData('201939','2016-17',res)
 	
+
 	
+	}else if(req.url=='/google1bb33fb6285d86ed.html'){
+			fs.readFile('./google1bb33fb6285d86ed.html',function(err,html){
+    	res.writeHead(200, {"Content-Type": "text/html"});
+    	res.write(html);
+     
+    	res.end();
 	
-	}else{
+	})}else{
 		
   
         fs.readFile('./App.html',function(err,html){
     	res.writeHead(200, {"Content-Type": "text/html"});
     	res.write(html);
-     // You Can Call Response.write Infinite Times BEFORE response.end
+     
     	res.end();
 
 		})}	
