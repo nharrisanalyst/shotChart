@@ -68,8 +68,7 @@ request(url,function(error,response,body){
 //
 //
 //
-//
-//
+
 
 var playerStatsData=function(player,seas,resO){
 
