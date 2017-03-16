@@ -127,7 +127,7 @@ var url = 'http://stats.nba.com/stats/shotchartdetail?'
 request(url,function(error,response,body){
   if(!error && response.statusCode==200){
   	data=JSON.parse(body);
-  	
+  	console.log(data);
   	
   	resO.writeHeader(200,{'Content-Type': 'text'});
  			resO.write(JSON.stringify(data));
