@@ -122,7 +122,7 @@ var url = 'http://stats.nba.com/stats/shotchartdetail?'
  });
  
  url=url.concat('VsDivision=')
- console.log(url);
+ 
  var data;
 request(url,function(error,response,body){
   if(!error && response.statusCode==200){
@@ -198,9 +198,7 @@ var server = http.createServer(function (req, res) {
             
             
             var playerData=JSON.parse(body);
-              console.log(playerData.playerId.toString());
-              console.log(playerData.seasonId.toString());
-              console.log(playerData.pic);           
+                         
             
             playerStatsData(playerData.playerId.toString(),playerData.seasonId.toString(),res)
             
