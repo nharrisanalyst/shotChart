@@ -771,7 +771,7 @@ hexUp.exit().remove();
 	     
 	
     console.log('worked until here')
-    var hexbin = d3_hexbin.hexbin()
+    var hexbin = d3.hexbin()
     .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]])
     
     .radius(10);
