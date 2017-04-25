@@ -174,7 +174,7 @@ float: left;
  
   <script>
 
-  var hexbin = d3_hexbin.hexbin();
+  var hexbin = d3.hexbin();
 
 </script>
   <div id ="wrapperAuthor">
@@ -437,7 +437,7 @@ console.log(data);
 	     
 	
     console.log('worked until here')
-    var hexbin = d3_hexbin.hexbin()
+    var hexbin = d3.hexbin()
     .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]])
     
     .radius(10);
@@ -633,7 +633,7 @@ var hexData=hexDataFormat(data);
 	     
 	
     console.log('worked until here')
-    var hexbin = d3_hexbin.hexbin()
+    var hexbin = d3.hexbin()
     .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]])
     
     .radius(10);

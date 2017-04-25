@@ -124,7 +124,15 @@ var url = 'http://stats.nba.com/stats/shotchartdetail?'
  url=url.concat('VsDivision=')
  
  var data;
-request(url,function(error,response,body){
+request({
+		headers: {
+'host': 'stats.nba.com',
+"cache-control":"max-age=0",
+'connection': 'keep-alive',
+"accept-encoding" : "Accepflate, sdch",
+'accept-language':'he-IL,he;q=0.8,en-US;q=0.6,en;q=0.4',
+'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'
+},url:url},function(error,response,body){
   if(!error && response.statusCode==200){
   	data=JSON.parse(body);
   	
