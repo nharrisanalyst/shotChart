@@ -122,7 +122,7 @@ var url = 'http://stats.nba.com/stats/shotchartdetail?'
  });
  
  url=url.concat('VsDivision=')
- 
+ console.log(url)
  var data;
 request({
 		headers: {
