@@ -10,14 +10,14 @@ but it does work locally here are instruction to get this working locally
 
 2.	make sure you have git installed I assume you will becuase this is github (if not here is some help https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-3. clone the repo
+3. clone the repo:
 			git clone https://github.com/nharrisanalyst/shotChart.git
 			
 			
-4. cd into the repor
+4. cd into the repo:
        cd shotChart
        
-5. start the app with node
+5. start the app with node:
 		node nodeServer.js
 		
 		
