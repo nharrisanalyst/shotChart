@@ -23,3 +23,4 @@ but it does work locally here are instruction to get this working locally
 		
 6. open your browser to http://localhost:8125/
 		
+![alt text](https://github.com/nharrisanalyst/shotChart/blob/master/ScreenShot.png)
