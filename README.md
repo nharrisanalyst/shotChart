@@ -17,6 +17,9 @@ but it does work locally here are instruction to get this working locally
 4. cd into the repo:
        cd shotChart
        
+5. install dependencies
+           npm install
+
 5. start the app with node:
 		node nodeServer.js
 		
